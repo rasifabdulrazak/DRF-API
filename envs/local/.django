@@ -1,0 +1,7 @@
+SECRET_KEY='django-insecure-$3o(8z9dc3spple(#14eb@g*@($uul%zjl%(qp*0btb+pm&9*('
+DEBUG=True
+DB_HOST='db'
+DB_NAME='localdb'
+DB_USER='localuser'
+DB_PASS='localdb@localuser'
+DB_PORT=5432
