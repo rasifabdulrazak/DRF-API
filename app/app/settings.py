@@ -12,7 +12,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 import os
-from django.utils.translation import gettext as _
+from django.utils.translation import gettext_lazy as _
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -132,10 +132,16 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-# LANGUAGES = [
-#     ('de', _('German')),
-#     ('en', _('English')),
-# ]
+LANGUAGES = [
+    ('en-us', _('English')), 
+    ('hi', _('Hindi')),
+    ('ml', _('Malayalam')),
+    ('ur', _('Urdu')),
+]
+
+LOCALE_PATHS = [
+    os.path.join(BASE_DIR, 'locale/')
+]
 
 TIME_ZONE = 'UTC'
 
