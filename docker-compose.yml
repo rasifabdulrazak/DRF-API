@@ -1,6 +1,17 @@
 version: '3.9'
 
 services:
+  nginx:
+    build:
+      context: ./nginx
+    ports:
+      - "8112:80"
+    depends_on:
+      - app
+    volumes:
+      - dev-static-data:/vol/web
+
+
   app:
     build:
       context: .
@@ -11,9 +22,12 @@ services:
     volumes:
       - ./app:/app
       - db_backup:/backups
+      - dev-static-data:/vol/web
+      - logs:/log
     command: >
       sh -c "python manage.py wait_for_db &&
              python manage.py migrate &&
+             python manage.py collectstatic --no-input &&
              gunicorn app.wsgi:application --bind 0.0.0.0:8000 --reload"
 
     ports:
@@ -37,3 +51,5 @@ services:
 volumes:
   dev-db-data:
   db_backup:
+  dev-static-data:
+  logs:

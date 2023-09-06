@@ -42,12 +42,12 @@ DJANGO_APPS = [
 
 CUSTOM_APPS = [
     'core',
+    'user',
 ]
 
 EXTERNAL_APPS = []
 
 INSTALLED_APPS = DJANGO_APPS + CUSTOM_APPS + EXTERNAL_APPS
-print(INSTALLED_APPS)
 
 DJANGO_MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -134,7 +134,11 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/pub/static/'
+MEDIA_URL = "/pub/media/"
+MEDIA_ROOT = "/vol/web/media/"
+STATIC_ROOT = "/vol/web/static/"
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field

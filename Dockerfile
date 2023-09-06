@@ -29,6 +29,8 @@ WORKDIR /app
 # It provides a way to specify the directory where commands, scripts, and other operations should be executed by default.
 
 # ARG DEV=false
+EXPOSE 8000
+
 
 
 RUN apt-get update \
@@ -68,22 +70,25 @@ RUN apt-get update \
     --disabled-password \
     --no-create-home \
     django-user \
-  && mkdir -p /app/log \
+  && mkdir -p /log \
   && mkdir -p /vol/web/media \
-  && mkdir -p /vol/web/static \
+  &&  mkdir -p /vol/web/static \
   && mkdir -p /backups \
   && mkdir -p /tmp/runtime-django-user \
   && chown -R django-user:django-user /tmp/runtime-django-user \
   && chown -R django-user:django-user /vol  \
   && chown -R django-user:django-user /app  \
-  && chown -R django-user:django-user /app/log  \
+  && chown -R django-user:django-user /log  \
   && chown -R django-user:django-user /backups  \
   && chmod -R 755 /vol \
   && chmod -R 755 /app \
-  && chmod -R 777 /app/log \
+  && chmod -R 777 /log \
   && chmod -R 777 /backups \
   && chmod a+w /backups \
   && chmod a+w /py/lib/python3.10/site-packages/django_celery_beat/migrations/
+
+
+ENV XDG_RUNTIME_DIR=/tmp/runtime-django-user
 
 
 ENV PATH="/py/bin:$PATH"
