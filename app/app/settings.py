@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 import os
+from django.utils.translation import gettext as _
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -40,14 +42,19 @@ DJANGO_APPS = [
     'django.contrib.staticfiles',
 ]
 
-CUSTOM_APPS = [
+PROJECT_APPS = [
     'core',
     'user',
 ]
 
-EXTERNAL_APPS = []
+EXTERNAL_APPS = [
+    'cloudinary',
+    'rest_framework',
+    'drf_spectacular',
+    'dbbackup',
+]
 
-INSTALLED_APPS = DJANGO_APPS + CUSTOM_APPS + EXTERNAL_APPS
+INSTALLED_APPS = DJANGO_APPS + PROJECT_APPS + EXTERNAL_APPS
 
 DJANGO_MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -57,6 +64,7 @@ DJANGO_MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
 ]
 
 CUSTOM_MIDDLEWARE = []
@@ -124,6 +132,11 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
+# LANGUAGES = [
+#     ('de', _('German')),
+#     ('en', _('English')),
+# ]
+
 TIME_ZONE = 'UTC'
 
 USE_I18N = True
@@ -131,7 +144,13 @@ USE_I18N = True
 USE_TZ = True
 
 
-# Static files (CSS, JavaScript, Images)
+# rest framework settings
+REST_FRAMEWORK = {
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+    # ...
+}
+
+# Static files (CSS, JavaScript, Images) -> docker path
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = '/pub/static/'
@@ -144,3 +163,60 @@ STATIC_ROOT = "/vol/web/static/"
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+# logging configuration
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "handlers": {
+        "error_file": {
+            "level": "ERROR",
+            "class": "logging.FileHandler",
+            "filename": "/log/error.log",
+            "formatter":"simple"
+        },
+        "critical_file": {
+            "level": "CRITICAL",
+            "class": "logging.FileHandler",
+            "filename": "/log/critical.log",
+            "formatter":"simple"
+        },
+    },
+    "loggers": {
+        "error_log": {
+            "handlers": ["error_file"],
+            "level": "ERROR",
+            "propagate": True,
+        },
+        "critical_log": {
+            "handlers": ["critical_file"],
+            "level": "CRITICAL",
+            "propagate": True,
+        },
+    },
+    "formatters": {
+        "simple": {
+            "format": "{asctime} {levelname} {module} {message}",
+            "style": "{",
+        }
+    },
+
+}
+
+
+# swagger ui api documentation setup configuration
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'DRF-API',
+    'DESCRIPTION': 'API documentation for my DRF-API',
+    'VERSION': '1.0.0',
+    'SWAGGER_UI_SETTINGS': {
+        'docExpansion': 'list',
+        'filter': True,
+        'persistAuthorization': True,
+    },
+}
+
+# Database backup configuration -> currently saving in server itself, update in production
+DBBACKUP_STORAGE = 'django.core.files.storage.FileSystemStorage'
+DBBACKUP_STORAGE_OPTIONS = {'location': os.environ.get('DB_BACKUP_LOCATION')}

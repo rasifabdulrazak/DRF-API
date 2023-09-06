@@ -17,3 +17,7 @@ pycryptodome #https://github.com/Legrandin/pycryptodome/
 pendulum==2.1.2 #https://github.com/sdispater/pendulum
 PyJWT==2.6.0 #https://pypi.org/project/PyJWT/
 django-celery-beat==2.4.0 #http://github.com/celery/django-celery-beat
+cloudinary>=1.34.0 #https://github.com/cloudinary/pycloudinary
+django-dbbackup>=4.0.2
+
+
