@@ -6,3 +6,4 @@ DB_USER='localuser'
 DB_PASS='localdb@localuser'
 DB_PORT=5432
 DB_BACKUP_LOCATION='/backups/'
+TIME_ZONE = "Asia/Calcutta"

@@ -12,7 +12,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 import os
-from django.utils.translation import gettext as _
+from django.utils.translation import gettext_lazy as _
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -25,10 +25,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ.get('SECRET_KEY')
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get('DEBUG')
-
-ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -132,16 +128,25 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-# LANGUAGES = [
-#     ('de', _('German')),
-#     ('en', _('English')),
-# ]
+LANGUAGES = [
+    ('en-us', _('English')), 
+    ('hi', _('Hindi')),
+    ('ml', _('Malayalam')),
+    ('ur', _('Urdu')),
+]
 
-TIME_ZONE = 'UTC'
+LOCALE_PATHS = [
+    os.path.join(BASE_DIR, 'locale/')
+]
+
 
 USE_I18N = True
 
+USE_L10N = True
+
 USE_TZ = True
+
+
 
 
 # rest framework settings
@@ -150,13 +155,6 @@ REST_FRAMEWORK = {
     # ...
 }
 
-# Static files (CSS, JavaScript, Images) -> docker path
-# https://docs.djangoproject.com/en/4.2/howto/static-files/
-
-STATIC_URL = '/pub/static/'
-MEDIA_URL = "/pub/media/"
-MEDIA_ROOT = "/vol/web/media/"
-STATIC_ROOT = "/vol/web/static/"
 
 
 # Default primary key field type
@@ -165,58 +163,3 @@ STATIC_ROOT = "/vol/web/static/"
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-# logging configuration
-LOGGING = {
-    "version": 1,
-    "disable_existing_loggers": False,
-    "handlers": {
-        "error_file": {
-            "level": "ERROR",
-            "class": "logging.FileHandler",
-            "filename": "/log/error.log",
-            "formatter":"simple"
-        },
-        "critical_file": {
-            "level": "CRITICAL",
-            "class": "logging.FileHandler",
-            "filename": "/log/critical.log",
-            "formatter":"simple"
-        },
-    },
-    "loggers": {
-        "error_log": {
-            "handlers": ["error_file"],
-            "level": "ERROR",
-            "propagate": True,
-        },
-        "critical_log": {
-            "handlers": ["critical_file"],
-            "level": "CRITICAL",
-            "propagate": True,
-        },
-    },
-    "formatters": {
-        "simple": {
-            "format": "{asctime} {levelname} {module} {message}",
-            "style": "{",
-        }
-    },
-
-}
-
-
-# swagger ui api documentation setup configuration
-SPECTACULAR_SETTINGS = {
-    'TITLE': 'DRF-API',
-    'DESCRIPTION': 'API documentation for my DRF-API',
-    'VERSION': '1.0.0',
-    'SWAGGER_UI_SETTINGS': {
-        'docExpansion': 'list',
-        'filter': True,
-        'persistAuthorization': True,
-    },
-}
-
-# Database backup configuration -> currently saving in server itself, update in production
-DBBACKUP_STORAGE = 'django.core.files.storage.FileSystemStorage'
-DBBACKUP_STORAGE_OPTIONS = {'location': os.environ.get('DB_BACKUP_LOCATION')}

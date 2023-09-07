@@ -3,13 +3,15 @@ from rest_framework.response import Response
 from core.logger import error_log
 from drf_spectacular.utils import extend_schema,extend_schema_view,OpenApiParameter, OpenApiExample
 from drf_spectacular.types import OpenApiTypes
-
+from .serializers import SampleSerializer
 
 
 
 @extend_schema_view(
     get=extend_schema(
-    description="This is a custom view that does something awesome.",
+    description="""
+    This is a custom view that does something awesome.
+    """,
     parameters=[
         {
             "name": "param1",
@@ -19,46 +21,37 @@ from drf_spectacular.types import OpenApiTypes
             "required": False,
         },
     ],
-    request={
-        "content": {"application/json": {"schema": {"type": "object"}}},
-        "required": True,
-    },
-    responses={
-        200: "Successful response",
-        400: "Bad request",
-    },
-    operation_id="User",
+
     tags=["User"],
     deprecated=False,
-    summary="Get Sample",
+    summary="""Get Sample""",
     ),
     post=extend_schema(
-        description="This is a custom view that does something awesome.",
+    description="""
+    This is a custom view that does something awesome.
+    """,
     parameters=[
         {
-            "name": "param1",
+            "name": "name",
             "in": "query",
-            "type": "integer",
+            "type": "string",
             "description": "A query parameter",
-            "required": False,
+            "required": True,
+        },
+        {
+            "name": "place",
+            "in": "query",
+            "type": "string",
+            "description": "A query parameter",
+            "required": True,
         },
     ],
-    request={
-        "content": {"application/json": {"schema": {"type": "object"}}},
-        "required": True,
-    },
-    responses={
-        200: "Successful response",
-        400: "Bad request",
-    },
-    operation_id="User",
     tags=["User"],
-    deprecated=False,
-    summary="Post Sample",
+    summary="""Post Sample""",
     )
     )
 class SampleTest(APIView):
-
+    serializer_class = SampleSerializer
     
     def get(self,request):
         error_log.error("wrongs")
