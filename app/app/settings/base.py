@@ -45,7 +45,6 @@ PROJECT_APPS = [
 ]
 
 EXTERNAL_APPS = [
-    'cloudinary',
     'rest_framework',
     'drf_spectacular',
     'dbbackup',

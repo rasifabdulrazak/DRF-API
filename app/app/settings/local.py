@@ -86,3 +86,13 @@ DBBACKUP_STORAGE = 'django.core.files.storage.FileSystemStorage'
 DBBACKUP_STORAGE_OPTIONS = {'location': os.environ.get('DB_BACKUP_LOCATION')}
 
 
+# cloudinary setup configurations for media storages
+USE_CLOUDINARY = os.environ.get('USE_CLOUDINARY')
+if USE_CLOUDINARY=='True':
+    INSTALLED_APPS += ['cloudinary','cloudinary_storage']
+    CLOUDINARY_STORAGE = {
+        'CLOUD_NAME': os.environ.get('CLOUDINARY_NAME'),
+        'API_KEY': os.environ.get('CLOUDINARY_API_KEY'),
+        'API_SECRET': os.environ.get('CLOUDINARY_SECRET_KEY'),
+    }
+    DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
