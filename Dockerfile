@@ -1,4 +1,4 @@
-FROM python:3.10-slim-buster
+FROM python:3.10.0-slim-buster
 # This image contains the minimal necessary packages to run Python applications, 
 # making it smaller and more suitable for containers where minimizing image size is a concern.
 

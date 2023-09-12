@@ -11,6 +11,9 @@ services:
     volumes:
       - dev-static-data:/vol/web
 
+  redis:
+    image: 'redis'
+
   app:
     build:
       context: .
@@ -37,6 +40,7 @@ services:
       - ./envs/local/.django
     depends_on:
       - db
+      - redis
 
   db:
     image: postgres:13-alpine
@@ -47,6 +51,41 @@ services:
       - db_backup:/backups
     ports:
       - "54320:5432"
+
+  celery:
+    restart: always
+    build:
+      context: .
+    command: celery -A app worker -l info
+    volumes:
+      - ./app:/app
+      - db_backup:/backups
+      - dev-static-data:/vol/web
+      - logs:/log
+    env_file:
+      - ./envs/local/.django
+    depends_on:
+      - app
+      - db
+      - redis
+
+  celery-beat:
+    restart: always
+    build:
+      context: .
+    volumes:
+      - ./app:/app
+      - db_backup:/backups
+      - dev-static-data:/vol/web
+      - logs:/log
+    image: drf-api
+    command: celery -A app beat -l INFO --scheduler django_celery_beat.schedulers:DatabaseScheduler
+    env_file:
+      - ./envs/local/.django
+    depends_on:
+      - app
+      - db
+      - redis
 
 
 volumes:

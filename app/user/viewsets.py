@@ -3,7 +3,14 @@ from rest_framework.response import Response
 from core.logger import error_log
 from drf_spectacular.utils import extend_schema,extend_schema_view,OpenApiParameter, OpenApiExample
 from drf_spectacular.types import OpenApiTypes
-from .serializers import SampleSerializer
+from .serializers import SampleSerializer,ExcelSampleSerializer
+from rest_framework.generics import ListAPIView, RetrieveAPIView
+from .models import Demo,ExcelDemo
+import pandas as pd
+from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
+from rest_framework.permissions import IsAuthenticated
+
+
 
 
 
@@ -50,12 +57,36 @@ from .serializers import SampleSerializer
     summary="""Post Sample""",
     )
     )
-class SampleTest(APIView):
+class SampleTest(ListAPIView):
+    # permission_classes = (IsAuthenticated,)
     serializer_class = SampleSerializer
+    queryset = Demo.objects.all()
     
-    def get(self,request):
-        error_log.error("wrongs")
-        print(request.user)
-        return Response({'test':'ok'})
+    # def get(self,request):
+    #     error_log.error("wrongs")
+    #     print(request.user)
+    #     return Response({'test':'ok'})
+    # def post(self,request):
+    #     return Response({'test':'ok'})
+
+class ExcelSampleView(APIView):
+    parser_classes=(MultiPartParser,FormParser,JSONParser)
+    serializer_class = ExcelSampleSerializer
+    
     def post(self,request):
-        return Response({'test':'ok'})
+        file = request.data.get('excel')
+        if file:
+            read_file = pd.read_excel(file)
+            read_file.fillna('', inplace=True)
+            print(read_file.iterrows(),"][]")
+            for index,row in read_file.iterrows():
+                data = {column_name.lower(): cell_value for column_name, cell_value in row[1:].items()}
+                try:
+                    ExcelDemo.objects.create(**data)
+                except Exception as e:
+                    print(str(e))
+                print(data)
+   
+            return Response({'message': 'File uploaded and processed successfully'})
+        else:
+            return Response({'message': 'No file provided'}, status=400)

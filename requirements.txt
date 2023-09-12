@@ -20,5 +20,5 @@ django-celery-beat==2.4.0 #http://github.com/celery/django-celery-beat
 django-cloudinary-storage>=0.3.0 #https://github.com/klis87/django-cloudinary-storage
 cloudinary>=1.34.0 #https://github.com/cloudinary/pycloudinary
 django-dbbackup>=4.0.2
-
-
+pandas>=2.1.0 #https://github.com/pandas-dev/pandas
+odfpy>=1.4.1

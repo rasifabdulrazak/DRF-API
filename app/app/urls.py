@@ -30,6 +30,9 @@ urlpatterns = [
 
 ]
 
+handler404 = 'core.exceptions._handle_not_found_error'
+handler500 = 'core.exceptions._handle_internal_server_error'
+
 if settings.DEBUG=='True':
    import debug_toolbar
    urlpatterns += [

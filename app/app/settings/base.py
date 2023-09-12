@@ -18,7 +18,7 @@ from django.utils.translation import gettext_lazy as _
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
+print(BASE_DIR,"==========")
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
@@ -42,12 +42,15 @@ PROJECT_APPS = [
     'core',
     'user',
     'logger',
+    'role',
 ]
 
 EXTERNAL_APPS = [
     'rest_framework',
     'drf_spectacular',
     'dbbackup',
+    "corsheaders",
+    "django_celery_beat",
 ]
 
 INSTALLED_APPS = DJANGO_APPS + PROJECT_APPS + EXTERNAL_APPS
@@ -55,6 +58,7 @@ INSTALLED_APPS = DJANGO_APPS + PROJECT_APPS + EXTERNAL_APPS
 DJANGO_MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    "corsheaders.middleware.CorsMiddleware",
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -151,7 +155,20 @@ USE_TZ = True
 
 # rest framework settings
 REST_FRAMEWORK = {
+    "DEFAULT_PARSER_CLASSES": [
+        "rest_framework.parsers.JSONParser",
+        "rest_framework.parsers.FormParser",
+        "rest_framework.parsers.MultiPartParser",
+        "rest_framework.parsers.FileUploadParser",
+    ],
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+    'EXCEPTION_HANDLER': 'core.exceptions.custom_exception_handler',
+    # 'DEFAULT_AUTHENTICATION_CLASSES': [
+    #     'rest_framework_simplejwt.authentication.JWTAuthentication',
+    # ],
+
+    
+
     # ...
 }
 
