@@ -4,9 +4,11 @@ import os
 import sys
 
 
+RUNNING_ENVIRONMENT = os.environ.get('RUNNING_ENVIRONMENT')
+
+
 def main():
     """Run administrative tasks."""
-    RUNNING_ENVIRONMENT = os.environ.get('RUNNING_ENVIRONMENT')
     print(RUNNING_ENVIRONMENT,"Running Environment")
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', f'app.settings.{RUNNING_ENVIRONMENT}')
     try:

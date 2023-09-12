@@ -1,3 +1,0 @@
-POSTGRES_DB=localdb
-POSTGRES_USER=localuser
-POSTGRES_PASSWORD=localdb@localuser
