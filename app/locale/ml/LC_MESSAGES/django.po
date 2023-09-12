@@ -20,12 +20,12 @@ msgstr ""
 
 #: app/settings.py:136
 msgid "Hindi"
-msgstr ""
+msgstr "ഹിന്ദി"
 
 #: app/settings.py:137
 msgid "Malayalam"
-msgstr ""
+msgstr "മലയാളം"
 
 #: app/settings.py:138
 msgid "Urdu"
-msgstr ""
+msgstr "ഉർദു"

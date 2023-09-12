@@ -5,8 +5,11 @@ from datetime import datetime
 from django.core.management import call_command
 from .logger import error_log,critical_log
 import os
+from celery import shared_task
 
 
+
+@shared_task
 def db_backup_task():
     """
     celery beat task for creating db backup
@@ -26,11 +29,11 @@ def db_backup_task():
                     print("deleting the old files")
                     os.remove(file_path)
         # Generate a filename without spaces or special characters
-        # timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-        name = f"DRF-API-BACKUP.dump"
+        timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+        name = f"DRF-API-BACKUP_{timestamp}.dump"
 
         # Call the dbbackup command without the -o option
-        call_command("dbbackup", output=name)
+        call_command("dbbackup", output_filename=name)
 
     except Exception as e:
         print(str(e))
